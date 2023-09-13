@@ -1,6 +1,5 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
-import bcrypt from "bcrypt";
 import createSlug from "../utils/createSlug.js";
 
 /**

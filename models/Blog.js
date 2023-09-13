@@ -6,10 +6,19 @@ const BlogSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
+      trim: true,
+      unique: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
     },
     description: {
       type: String,
       required: true,
+      trim: true,
     },
     category: {
       type: String,
@@ -39,7 +48,6 @@ const BlogSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-
     author: {
       type: String,
       default: "Admin",
@@ -52,6 +60,12 @@ const BlogSchema = new mongoose.Schema(
     ],
   },
   {
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
     timestamps: true,
   }
 );
