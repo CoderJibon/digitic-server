@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // create Product category schema
 
-const productCategorySchema = mongoose.Schema(
+const productCategorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -18,12 +18,12 @@ const productCategorySchema = mongoose.Schema(
     },
     parentCategory: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+      ref: "ProductCategory",
       default: null,
     },
     subCategory: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "Category",
+      ref: "ProductCategory",
       default: null,
     },
     icon: {
@@ -51,7 +51,5 @@ const productCategorySchema = mongoose.Schema(
 );
 
 // export
-
-module.exports =
-  mongoose.models.ProductCategory ||
+export default mongoose.models.ProductCategory ||
   mongoose.model("ProductCategory", productCategorySchema);

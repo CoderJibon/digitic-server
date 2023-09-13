@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // create brand schema
 
@@ -36,4 +36,4 @@ const brandSchema = new mongoose.Schema(
 
 // export brand schema
 
-module.exports = mongoose.models.Brand || mongoose.model("Brand", brandSchema);
+export default mongoose.models.Brand || mongoose.model("Brand", brandSchema);

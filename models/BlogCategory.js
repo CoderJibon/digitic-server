@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // create Blog category schema
 
@@ -32,6 +32,5 @@ const blogCategorySchema = mongoose.Schema(
 
 // export
 
-module.exports =
-  mongoose.models.BlogCategory ||
+export default mongoose.models.BlogCategory ||
   mongoose.model("BlogCategory", blogCategorySchema);

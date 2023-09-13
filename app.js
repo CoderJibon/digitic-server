@@ -8,6 +8,9 @@ import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoute.js";
 import productRoute from "./routes/productRoute.js";
 import blogRoute from "./routes/blogRoute.js";
+import blogCategoryRoute from "./routes/blogCategoryRoute.js";
+import brandRoute from "./routes/brandRoute.js";
+import productCatRoute from "./routes/productCategoryRoute.js";
 
 //express initialization
 const app = express();
@@ -25,6 +28,9 @@ app.use(express.static(path.join(path.resolve() + "/public")));
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/blog", blogRoute);
 app.use("/api/v1/product", productRoute);
+app.use("/api/v1/blog-category", blogCategoryRoute);
+app.use("/api/v1/product-category", productCatRoute);
+app.use("/api/v1/brand", brandRoute);
 app.use("/api/v1/auth", authRoute);
 
 //error handlers
