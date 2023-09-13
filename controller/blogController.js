@@ -107,7 +107,6 @@ export const deleteBlog = asyncHandler(async (req, res) => {
  * @Method put
  * @access protected
  */
-
 export const updateBlog = asyncHandler(async (req, res) => {
   //get params id
   const { id } = req.params;
@@ -143,4 +142,135 @@ export const updateBlog = asyncHandler(async (req, res) => {
     message: `Blog updated successful`,
     blog: updateBlogData,
   });
+});
+
+/**
+ * @desc Blog Is Like
+ * @route api/v1/blog/like
+ * @Method post
+ * @access protected
+ */
+export const likeBlog = asyncHandler(async (req, res) => {
+  //get body data
+  const { blogId } = req.body;
+  if (!blogId) {
+    throw new Error("Invalid Blog ID");
+  }
+  //find blog
+  const blog = await Blog.findById(blogId);
+  //login user
+  const user = req.me;
+  //already dislike blog
+  const dislike = blog.dislikes.map(
+    (el) => el._id.toString() === user._id.toString()
+  );
+  //if dislike is available
+  if (dislike[0]) {
+    await Blog.findByIdAndUpdate(
+      blogId,
+      {
+        $pull: { dislikes: user._id },
+        isDisliked: false,
+      },
+      {
+        new: true,
+      }
+    );
+  }
+  // if like true
+  if (blog.isLiked === true) {
+    const unLike = await Blog.findByIdAndUpdate(
+      blogId,
+      {
+        $pull: { likes: user._id },
+        isLiked: false,
+      },
+      {
+        new: true,
+      }
+    );
+    //response
+    res.status(200).json({ message: "Blog unLike successful ", blog: unLike });
+  } else {
+    const likeb = await Blog.findByIdAndUpdate(
+      blogId,
+      {
+        $push: { likes: user._id },
+        isLiked: true,
+      },
+      {
+        new: true,
+      }
+    );
+    //response
+    res.status(200).json({ message: "Blog like successful ", blog: likeb });
+  }
+});
+
+/**
+ * @desc Blog Is dislike
+ * @route api/v1/blog/dislike
+ * @Method post
+ * @access protected
+ */
+
+export const dislikeBlog = asyncHandler(async (req, res) => {
+  //get body data
+  const { blogId } = req.body;
+  if (!blogId) {
+    throw new Error("Invalid Blog ID");
+  }
+  //find blog
+  const blog = await Blog.findById(blogId);
+  //login user
+  const user = req.me;
+  //already like blog
+  const like = blog.likes.map(
+    (el) => el._id.toString() === user._id.toString()
+  );
+  //if like is available
+  if (like[0]) {
+    await Blog.findByIdAndUpdate(
+      blogId,
+      {
+        $pull: { likes: user._id },
+        isLiked: false,
+      },
+      {
+        new: true,
+      }
+    );
+  }
+  // if dislike true
+  if (blog.isDisliked === true) {
+    const unDisLike = await Blog.findByIdAndUpdate(
+      blogId,
+      {
+        $pull: { dislikes: user._id },
+        isDisliked: false,
+      },
+      {
+        new: true,
+      }
+    );
+    //response
+    res
+      .status(200)
+      .json({ message: "Blog unDislike successful ", blog: unDisLike });
+  } else {
+    const dislike = await Blog.findByIdAndUpdate(
+      blogId,
+      {
+        $push: { dislikes: user._id },
+        isDisliked: true,
+      },
+      {
+        new: true,
+      }
+    );
+    //response
+    res
+      .status(200)
+      .json({ message: "Blog dislike successful ", blog: dislike });
+  }
 });
