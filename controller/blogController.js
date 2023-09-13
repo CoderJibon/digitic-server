@@ -11,10 +11,10 @@ import createSlug from "../utils/createSlug.js";
 
 export const getAllBlog = asyncHandler(async (req, res) => {
   //Find all blogs data
-  const Blogs = await Blog.find();
+  const blogs = await Blog.find();
   // return all blogs data
-  if (Blogs.length > 0) {
-    return res.status(200).json(Blogs);
+  if (blogs.length > 0) {
+    return res.status(200).json(blogs);
   }
   // if not found blogs data
   res.status(200).json([]);
@@ -42,7 +42,7 @@ export const createBlog = asyncHandler(async (req, res) => {
   }
 
   // create new Blog
-  const Blog = await Blog.create({
+  const blog = await Blog.create({
     title,
     slug: createSlug(title),
     description,
@@ -50,7 +50,7 @@ export const createBlog = asyncHandler(async (req, res) => {
     author,
   });
 
-  res.status(201).json({ Blog, message: "Blog created successfully" });
+  res.status(201).json({ blog, message: "Blog created successfully" });
 });
 
 /**
@@ -63,17 +63,22 @@ export const getSingleBlog = asyncHandler(async (req, res) => {
   // get params slug
   const { slug } = req.params;
   //find bold data
-  const Blog = await Blog.findOne({ slug });
+  const blog = await Blog.findOne({ slug });
   // if not found blog data
-  if (!Blog) {
+  if (!blog) {
     throw new Error("Blog not found");
   }
   //blog views update
-  await Blog.findByIdAndUpdate(Blog._id, {
-    numViews: { $inc: 1 },
-  });
+  await Blog.findByIdAndUpdate(
+    blog._id,
+    {
+      $inc: { numViews: 1 },
+    },
+    { new: true }
+  );
+
   // return blog data
-  res.status(200).json({ Blog });
+  res.status(200).json({ blog });
 });
 
 /**
@@ -85,14 +90,15 @@ export const getSingleBlog = asyncHandler(async (req, res) => {
 export const deleteBlog = asyncHandler(async (req, res) => {
   //get params id
   const { id } = req.params;
+  //find and delete blog
+  const blog = await Blog.findByIdAndDelete(id);
   //not available blog
-  if (!Blog) {
+  if (!blog) {
     throw new Error("Blog Already Delete");
   }
-  //find and delete blog
-  const Blog = await Blog.findByIdAndDelete(id);
+
   //response
-  res.status(200).json({ message: "Blog Delete Successful", Blog });
+  res.status(200).json({ message: "Blog Delete Successful", blog });
 });
 
 /**
@@ -113,9 +119,9 @@ export const updateBlog = asyncHandler(async (req, res) => {
     throw new Error("Blog title Is required");
   }
   //is available blog data
-  const Blog = await Blog.findById(id).exec();
+  const blog = await Blog.findById(id).exec();
   // is not available a blog data
-  if (!Blog) {
+  if (!blog) {
     throw new Error("Blog not found");
   }
   //update blog data
@@ -135,6 +141,6 @@ export const updateBlog = asyncHandler(async (req, res) => {
   //response blog update
   res.status(200).json({
     message: `Blog updated successful`,
-    Blog: updateBlogData,
+    blog: updateBlogData,
   });
 });

@@ -17,12 +17,12 @@ const BlogSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
       trim: true,
     },
     category: {
       type: String,
-      required: true,
+      trim: true,
+      default: null,
     },
     numViews: {
       type: Number,

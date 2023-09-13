@@ -7,6 +7,7 @@ import authRoute from "./routes/authRoute.js";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoute.js";
 import productRoute from "./routes/productRoute.js";
+import blogRoute from "./routes/blogRoute.js";
 
 //express initialization
 const app = express();
@@ -22,6 +23,7 @@ app.use(express.static(path.join(path.resolve() + "/public")));
 
 //router routes
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/blog", blogRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/auth", authRoute);
 
