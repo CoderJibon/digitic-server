@@ -11,7 +11,7 @@ import createSlug from "../utils/createSlug.js";
 
 export const getAllBlog = asyncHandler(async (req, res) => {
   //Find all blogs data
-  const blogs = await Blog.find();
+  const blogs = await Blog.find().populate("likes").populate("dislikes");
   // return all blogs data
   if (blogs.length > 0) {
     return res.status(200).json(blogs);
@@ -63,7 +63,9 @@ export const getSingleBlog = asyncHandler(async (req, res) => {
   // get params slug
   const { slug } = req.params;
   //find bold data
-  const blog = await Blog.findOne({ slug });
+  const blog = await Blog.findOne({ slug })
+    .populate("likes")
+    .populate("dislikes");
   // if not found blog data
   if (!blog) {
     throw new Error("Blog not found");
@@ -188,7 +190,7 @@ export const likeBlog = asyncHandler(async (req, res) => {
       {
         new: true,
       }
-    );
+    ).populate("likes");
     //response
     res.status(200).json({ message: "Blog unLike successful ", blog: unLike });
   } else {
@@ -201,7 +203,7 @@ export const likeBlog = asyncHandler(async (req, res) => {
       {
         new: true,
       }
-    );
+    ).populate("likes");
     //response
     res.status(200).json({ message: "Blog like successful ", blog: likeb });
   }
@@ -252,7 +254,7 @@ export const dislikeBlog = asyncHandler(async (req, res) => {
       {
         new: true,
       }
-    );
+    ).populate("dislikes");
     //response
     res
       .status(200)
@@ -267,7 +269,7 @@ export const dislikeBlog = asyncHandler(async (req, res) => {
       {
         new: true,
       }
-    );
+    ).populate("dislikes");
     //response
     res
       .status(200)

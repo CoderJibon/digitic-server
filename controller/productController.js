@@ -11,6 +11,7 @@ import Product from "../models/Product.js";
 export const getAllProducts = asyncHandler(async (req, res) => {
   // Filtering
   const queryObj = { ...req.query };
+
   const excludeFields = ["page", "sort", "limit", "fields"];
   excludeFields.forEach((el) => delete queryObj[el]);
   let queryStr = JSON.stringify(queryObj);
