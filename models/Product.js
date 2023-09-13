@@ -83,6 +83,14 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: 0,
     },
+    status: {
+      type: Boolean,
+      default: true,
+    },
+    trash: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

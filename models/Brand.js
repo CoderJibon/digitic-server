@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-// create Blog category schema
+// create brand schema
 
-const blogCategorySchema = mongoose.Schema(
+const brandSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -14,7 +14,11 @@ const blogCategorySchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
+    },
+    photo: {
+      type: String,
+      default: null,
+      trim: true,
     },
     status: {
       type: Boolean,
@@ -30,8 +34,6 @@ const blogCategorySchema = mongoose.Schema(
   }
 );
 
-// export
+// export brand schema
 
-module.exports =
-  mongoose.models.BlogCategory ||
-  mongoose.model("BlogCategory", blogCategorySchema);
+module.exports = mongoose.models.Brand || mongoose.model("Brand", brandSchema);
