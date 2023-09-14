@@ -163,11 +163,11 @@ export const likeBlog = asyncHandler(async (req, res) => {
   //login user
   const user = req.me;
   //already dislike blog
-  const dislike = blog.dislikes.map(
+  const dislike = blog.dislikes.find(
     (el) => el._id.toString() === user._id.toString()
   );
   //if dislike is available
-  if (dislike[0]) {
+  if (dislike) {
     await Blog.findByIdAndUpdate(
       blogId,
       {
@@ -227,11 +227,11 @@ export const dislikeBlog = asyncHandler(async (req, res) => {
   //login user
   const user = req.me;
   //already like blog
-  const like = blog.likes.map(
+  const like = blog.likes.find(
     (el) => el._id.toString() === user._id.toString()
   );
   //if like is available
-  if (like[0]) {
+  if (like) {
     await Blog.findByIdAndUpdate(
       blogId,
       {
