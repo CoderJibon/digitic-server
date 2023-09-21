@@ -20,8 +20,8 @@ const BlogSchema = new mongoose.Schema(
       trim: true,
     },
     category: {
-      type: String,
-      trim: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "BlogCategory",
       default: null,
     },
     numViews: {

@@ -18,7 +18,7 @@ export const getAllProducts = asyncHandler(async (req, res) => {
   let queryStr = JSON.stringify(queryObj);
   queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/gi, (m) => `$${m}`);
   //query for products
-  let query = Product.find(JSON.parse(queryStr));
+  let query = Product.find(JSON.parse(queryStr)).populate("ratings");
 
   // Sorting
   const sort = req.query.sort || "";
@@ -275,6 +275,92 @@ export const addToWishlist = asyncHandler(async (req, res) => {
         .status(200)
         .json({ wishlist: addWishlist, message: "Add wishlist Item" });
     }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+/**
+ * @desc Product Ratings Update
+ * @route api/v1/product/rating
+ * @method put
+ * @access protected
+ */
+export const rating = asyncHandler(async (req, res) => {
+  // get product id form body
+  const { productId, comment, star } = req.body;
+  if ((!productId, !star)) {
+    throw new Error("All Fields are required");
+  }
+  //is login user
+  const { email, _id } = req.me;
+  //find user
+  const user = await User.find({ email });
+  //if user is not valid
+  if (!user) {
+    throw new Error("invalid user");
+  }
+  //get a product
+  const product = await Product.findById(productId);
+
+  //if already have a review
+  const alreadyReview = product.ratings?.some(
+    (userID) => userID.postedBy.toString() === _id.toString()
+  );
+
+  try {
+    if (alreadyReview) {
+      //update a review
+      await Product.findOneAndUpdate(
+        {
+          _id: productId,
+          "ratings.postedBy": _id,
+        },
+        {
+          $set: {
+            "ratings.$.star": star,
+            "ratings.$.comment": comment,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+    } else {
+      //Create a new review
+      await Product.findByIdAndUpdate(
+        productId,
+        {
+          $push: {
+            ratings: {
+              star: star,
+              comment: comment,
+              postedBy: _id,
+            },
+          },
+        },
+        {
+          new: true,
+        }
+      );
+    }
+    //get the
+    let totalRating = product.ratings.length;
+    //rating cal
+    let ratingSum = product.ratings
+      .map((item) => item.star)
+      .reduce((prev, curr) => prev + curr, 0);
+    //total rating
+    let actualRating = Math.round(ratingSum / totalRating);
+    // final product rating
+    let finalProduct = await Product.findByIdAndUpdate(
+      productId,
+      {
+        totalRating: actualRating,
+      },
+      { new: true }
+    );
+    res.json(finalProduct);
   } catch (error) {
     throw new Error(error);
   }

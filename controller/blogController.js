@@ -46,7 +46,7 @@ export const createBlog = asyncHandler(async (req, res) => {
     title,
     slug: createSlug(title),
     description,
-    category,
+    category: category ? category : null,
     author,
   });
 
@@ -166,6 +166,7 @@ export const likeBlog = asyncHandler(async (req, res) => {
   const dislike = blog.dislikes.find(
     (el) => el._id.toString() === user._id.toString()
   );
+
   //if dislike is available
   if (dislike) {
     await Blog.findByIdAndUpdate(
@@ -226,6 +227,7 @@ export const dislikeBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.findById(blogId);
   //login user
   const user = req.me;
+
   //already like blog
   const like = blog.likes.find(
     (el) => el._id.toString() === user._id.toString()

@@ -6,6 +6,7 @@ import {
   deleteSingleProduct,
   getAllProducts,
   getSingleProduct,
+  rating,
   updateProduct,
 } from "../controller/productController.js";
 
@@ -19,6 +20,7 @@ productRoute.route("/:slug").get(getSingleProduct);
 productRoute.route("/:id").delete(authMiddleware, isAdmin, deleteSingleProduct);
 productRoute.route("/:id").patch(authMiddleware, isAdmin, updateProduct);
 productRoute.route("/wishlist").put(authMiddleware, addToWishlist);
+productRoute.route("/rating").put(authMiddleware, rating);
 
 //export product routes
 export default productRoute;
