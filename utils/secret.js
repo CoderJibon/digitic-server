@@ -26,5 +26,23 @@ const APP_ENV = process.env.APP_ENV;
  */
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
+
+/**
+ * cloudinary
+ */
+const CLOUD_NAME = process.env.CLOUD_NAME;
+const CLOUD_API_KEY = process.env.CLOUD_API_KEY;
+const CLOUD_API_SECRET = process.env.CLOUD_API_SECRET;
+
 //export secret key
-export { PORT, MONGODB_URL, JWT_SECRET, APP_ENV, EMAIL_USER, EMAIL_PASS };
+export {
+  PORT,
+  MONGODB_URL,
+  JWT_SECRET,
+  APP_ENV,
+  EMAIL_USER,
+  EMAIL_PASS,
+  CLOUD_NAME,
+  CLOUD_API_KEY,
+  CLOUD_API_SECRET,
+};

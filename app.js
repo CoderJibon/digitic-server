@@ -11,6 +11,7 @@ import blogRoute from "./routes/blogRoute.js";
 import blogCategoryRoute from "./routes/blogCategoryRoute.js";
 import brandRoute from "./routes/brandRoute.js";
 import productCatRoute from "./routes/productCategoryRoute.js";
+import couponRoute from "./routes/couponRoute.js";
 
 //express initialization
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/v1/product", productRoute);
 app.use("/api/v1/blog-category", blogCategoryRoute);
 app.use("/api/v1/product-category", productCatRoute);
 app.use("/api/v1/brand", brandRoute);
+app.use("/api/v1/coupon", couponRoute);
 app.use("/api/v1/auth", authRoute);
 
 //error handlers

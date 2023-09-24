@@ -307,7 +307,6 @@ export const rating = asyncHandler(async (req, res) => {
   const alreadyReview = product.ratings?.some(
     (userID) => userID.postedBy.toString() === _id.toString()
   );
-
   try {
     if (alreadyReview) {
       //update a review
@@ -359,7 +358,12 @@ export const rating = asyncHandler(async (req, res) => {
         totalRating: actualRating,
       },
       { new: true }
-    );
+    ).populate({
+      path: "ratings",
+      populate: {
+        path: "postedBy",
+      },
+    });
     res.json(finalProduct);
   } catch (error) {
     throw new Error(error);
